@@ -1,49 +1,53 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using mini_store.Models;
-
+using mini_store.Data;
 namespace mini_store.Controllers;
 
 public class HomeController : Controller
 {
-    private static dynamic[] _categories = 
+   private readonly AppDbContext _context;
+
+
+   public HomeController(AppDbContext cn)
     {
-        new { Id = 0, Name = "إلكترونيات ", Icon = "fa-solid fa-bolt-lightning" },
-        new { Id = 1, Name = "ملابس ", Icon = "fa-solid fa-shirt" },
-        new { Id = 2, Name = "كتب ", Icon = "fas fa-book-open" } 
-    };
-    private static dynamic[] _products = 
-    {
-        new { CategoryId = 0, Name = "هاتف ذكي ", Price = 2500, Description = "هاتف ذكي بكاميرا عالية الدقة ", Image = "phone.jpg" },
-        new { CategoryId = 0, Name = "حاسوب محمول ", Price = 4500, Description = "حاسوب مخصص للمطورين ", Image = "laptop.jpg" }, 
-        new { CategoryId = 1, Name = "قميص قطني ", Price = 150, Description = "قميص مريح وصيفي ", Image = "shirt.jpg" }, 
-        new { CategoryId = 2, Name = "كتاب برمجة ", Price = 90, Description = "دليل شامل لتعلم البرمجة ", Image = "book.jpg" } 
-              
-              };
+        _context=cn;
+    }
+ private static  dynamic[] _products  =
+{
+    new { CategoryId = 0, Name = "هاتف ذكي", Price = 2500, Description = "هاتف ذكي بكاميرا عالية الدقة", Image = "phone.jpg" },
+
+    new { CategoryId = 0, Name = "حاسوب محمول", Price = 4500, Description = "حاسوب مخصص للمطورين ram 16gm hard 1TB screen 16hs", Image = "laptop.jpg" },
+
+    new { CategoryId = 1, Name = "قميص قطني", Price = 150, Description = "قميص مريح وصيفي", Image = "shirt.jpg" },
+
+    new { CategoryId = 2, Name = "كتاب برمجة", Price = 90, Description = "دليل شامل لتعلم البرمجة", Image = "book.jpg" }
+};
+
+
     public IActionResult Index()
     {
-        ViewBag.Categorieslist=_categories;
-        return View();
+       var Categories=_context.categories.ToList();
+
+        return View(Categories);
     }
-    public IActionResult products(int id)
+
+
+    [Route("list")]
+    public IActionResult Products(int id)
     {
-        var filtered =_products
-        .Where(p=> p.CategoryId==id)
-        .ToList();
-        ViewBag.filteredproducts=filtered;
-        ViewBag.categoryname=_categories[id]; 
+        var filtered=_context.products.Where(p=> p.CategoryId==id).ToList();
+         ViewBag.Filtered=filtered;
         return View();
     }
 
     public IActionResult Details(string name)
     {
-        var product = _products.FirstOrDefault(p=>p.Name==name);
 
-        if (product == null)
-        {
-            return NotFound();
-        }
-        ViewBag.Product=product;
+         var filtered=_products.FirstOrDefault(p=> p.Name== name);
+
+         ViewBag.Products=filtered;
+
         return View();
     }
 

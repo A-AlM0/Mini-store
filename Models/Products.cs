@@ -1,16 +1,37 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace mini_store.Models
 {
     public class Products
     {
         [Key]
-        public int Id {get; set;}
+        public int Id {get ; set;}
         
-        public string Name {get; set;}
+        [Required(ErrorMessage ="يجب ادخال اسم المنتج")]
+        [StringLength(20,ErrorMessage ="اسم المنتج طويل جداً ")]
+        public string Name { get; set; }
 
-        public float Price { get; set; }
+         [Required(ErrorMessage = "يجب إدخال السعر")]
+         [Range(0.01, 10000.00, ErrorMessage = "يجب أن يكون السعر بين 0.01 و 10000")]
+         public decimal Price { get; set; }
         
-        public string Image {get; set;}
+        [Required(ErrorMessage ="يجب ادخال رابط الصورة ")]
+        public string Image { get; set; }
+
+        [Required(ErrorMessage ="يجب ادخال رابط الصورة")]
+        public int CategoryId {get ; set ;}  // Foreign Key 
+     
+        [NotMapped]
+        [Required(ErrorMessage ="يجب اختيار صورة")]
+        public IFormFile? ImageFile {get ; set ;} 
+
+       [ForeignKey("CategoryId")]
+       public virtual Categories? Categories { get; set; }
+       
+         
     }
+
+
+    
 }

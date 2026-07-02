@@ -1,34 +1,30 @@
-﻿@using System.ComponentModel
-@using System.Security.Cryptography
+﻿﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+@model List<Categories>
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<div class="container">
+    <h1 class="alert alert-info">     @SharedLocalizer["SelectCategories"]  </h1>
 
-<div dir="rtl" class="container">
-    <h1 class="text-center fw-bold my-5" style="color: #4a0080;">الأقسام الرئيسية للمتجر</h1>
-    <div class="row">
-        @foreach(var item in ViewBag.CategoriesList)
+    <div class="row d-flex justify-content-center align-items-center">
+        @foreach(var item in Model)
         {
-
-            <div class="col-md-4">
-                <a asp-action="products" asp-route-id="@item.Id" class="text-decoration-none">
+            <dic class="col-md-4">
               <div class="card text-center h-100">
                 <div class="card-body">
                   <div class="mb-4">
-                      <i class="fas @item.Icon category-icon" style="color: rgb(92, 20, 154); font-size: 80px;"></i>
+                      <i class="fas @item.Icon" style="color: rgb(92, 20, 154); font-size: 80px;"></i>
                    </div>
-                    <h2 class="fw-bold mt-4 mb-4">
+                    <h4 class="fw-bold mb-4">
                         @item.Name
-                    </h2>
-                    <a asp-action="products" asp-route-id="@item.Id" 
-                    class="btn h5 px-4 py-2" 
-                    style="background: linear-gradient(135deg, #4a0080, #9b30d0); color: white; border: none; border-radius: 20px; font-size: 20px; font-weight: bold">
-                        عرض المنتجات
-                    </a>                
+                    </h4>
+                    <a asp-action="Products" asp-route-id=@item.Id class="btn btn-danger">عرض المنتجات</a>
                 </div>
-              </div></a>
-            </div>
+              </div>
+            </dic>
         }
     </div>
 </div>
