@@ -1,0 +1,50 @@
+@model mini_store.Models.ProductDetails
+@{
+    Layout = "_DashboardLayout";
+}
+<h2>تعديل تفاصيل المنتج</h2>
+
+<div class="container">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="card p-5">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            المنتج الأساسي
+                        </label>
+                        <select asp-for="ProductId" class="form-select">
+                            <option value="">اختر المنتج</option>
+                            @foreach (var item in ViewBag.Products)
+                            {
+                                <option value="@item.Id">
+                                    @item.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description">الوصف</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="MadeIn">بلد المنشأ</label>
+                        <input asp-for="MadeIn" class="form-control" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="StockQuantity">الكمية المتوفرة</label>
+                        <input asp-for="StockQuantity" type="number" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+                </form>
+            </div>
+        </div>
+        }
+    </div>

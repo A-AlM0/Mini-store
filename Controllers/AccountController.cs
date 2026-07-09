@@ -9,21 +9,21 @@ namespace mini_store.Controllers
     {
         private readonly SignInManager<ApplicationUser> _signInManager;  // خاص بعملية تسجيل الدخول
 
-         private readonly UserManager<ApplicationUser> _userManager; 
+        private readonly UserManager<ApplicationUser> _userManager;
 
         // 2. حقن الأدوات في المُشيّد (Constructor)
-        public AccountController(SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> userManager) 
+        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
-            _userManager = userManager; 
+            _userManager = userManager;
         }
         [HttpGet]
-        public IActionResult Login(string returnUrl = "/") 
+        public IActionResult Login(string returnUrl = "/")
         {
             var model = new LoginViewModel { ReturnUrl = returnUrl };
             return View(model);
         }
-         [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -31,18 +31,18 @@ namespace mini_store.Controllers
             {
                 // محاولة تسجيل الدخول
                 var result = await _signInManager.PasswordSignInAsync(
-                    model.Email, 
-                    model.Password, 
-                    model.RememberMe, 
+                    model.Email,
+                    model.Password,
+                    model.RememberMe,
                     lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
-                
+
                     return RedirectToAction("Index", "Products");
                 }
-                
-             
+
+
                 ModelState.AddModelError(string.Empty, "البريد الإلكتروني أو كلمة المرور غير صحيحة.");
             }
 
@@ -55,56 +55,54 @@ namespace mini_store.Controllers
         {
             // تنظيف جلسة الدخول وحذف ملف تعريف الارتباط (Cookie)
             await _signInManager.SignOutAsync();
-            
+
             // توجيه المستخدم إلى الصفحة الرئيسية بعد تسجيل الخروج
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
-       
+
         [HttpGet]
-            public IActionResult Register()
-            {
-                return View();
-            }
-
-
-     [HttpPost]
-
-     public async Task<IActionResult> Register(RegisterViewModel  register)
+        public IActionResult Register()
         {
-            if(ModelState.IsValid)
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel register)
+        {
+            if (ModelState.IsValid)
             {
 
-                    ApplicationUser user=new ApplicationUser
-                    {
-                    
-                    UserName=register.Email,
-                    Email=register.Email,
-                    FirstName=register.FirstName,
-                    LastName=register.LastName,
-                    };
+                ApplicationUser user = new ApplicationUser
+                {
+
+                    UserName = register.Email,
+                    Email = register.Email,
+                    FirstName = register.FirstName,
+                    LastName = register.LastName,
+                };
 
 
-                    IdentityResult result=await _userManager.CreateAsync(user,register.Password);
+                IdentityResult result = await _userManager.CreateAsync(user, register.Password);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Login");
                 }
 
-                
+
             }
 
 
-           
+
             return View(register);
         }
 
-    
 
-        
-          
+
     }
 
 
-    
+
 }

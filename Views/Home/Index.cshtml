@@ -1,4 +1,4 @@
-﻿﻿@using System.Globalization
+﻿﻿﻿@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @model List<Categories>
@@ -7,23 +7,23 @@
 }
 
 <div class="container">
-    <h1 class="alert alert-info">     @SharedLocalizer["SelectCategories"]  </h1>
+    <h1 class="alert alert-info"> @SharedLocalizer["SelectCategories"] </h1>
 
     <div class="row d-flex justify-content-center align-items-center">
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             <dic class="col-md-4">
-              <div class="card text-center h-100">
-                <div class="card-body">
-                  <div class="mb-4">
-                      <i class="fas @item.Icon" style="color: rgb(92, 20, 154); font-size: 80px;"></i>
-                   </div>
-                    <h4 class="fw-bold mb-4">
-                        @item.Name
-                    </h4>
-                    <a asp-action="Products" asp-route-id=@item.Id class="btn btn-danger">عرض المنتجات</a>
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <i class="fas @item.Icon" style="color: rgb(92, 20, 154); font-size: 80px;"></i>
+                        </div>
+                        <h4 class="fw-bold mb-4">
+                            @item.Name
+                        </h4>
+                        <a asp-action="Products" asp-route-id=@item.Id class="btn btn-danger">عرض المنتجات</a>
+                    </div>
                 </div>
-              </div>
             </dic>
         }
     </div>

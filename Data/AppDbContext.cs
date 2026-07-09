@@ -16,7 +16,8 @@ namespace mini_store.Data
             }
 
 
-        public DbSet<Products> products{get;set;}
+        public DbSet<Products> Products{get;set;}
+        public DbSet<ProductDetails> ProductDetails{get;set;}
 
         public DbSet<Categories> categories {get;set;}
 

@@ -25,11 +25,13 @@ namespace mini_store.Controllers
            [Authorize]
          public IActionResult Index(string searchTerm)
         {
+
+            string lan = Request.Cookies["User"]?.ToString()??"Not Found";
            
             var categories=_context.categories.ToList();
             ViewBag.categories=categories;
 
-            var Productquery=_context.products.AsQueryable();
+            var Productquery=_context.Products.AsQueryable();
              
              if(!string.IsNullOrEmpty(searchTerm))
             {
@@ -94,7 +96,7 @@ namespace mini_store.Controllers
         
             if(ModelState.IsValid)
             {
-                  _context.products.Add(product);  // insert into Products Table 
+                  _context.Products.Add(product);  // insert into Products Table 
                   _context.SaveChanges();
 
                   return RedirectToAction("Index");
@@ -102,16 +104,16 @@ namespace mini_store.Controllers
            
             ViewBag.categories=_context.categories.ToList();
         
-            return View("Index",_context.products.ToList());
+            return View("Index",_context.Products.ToList());
         }
 
        public IActionResult Delete(int id)
         {
-            var products=_context.products.Find(id);
+            var products=_context.Products.Find(id);
 
             if(products !=null)
             {
-                _context.products.Remove(products);
+                _context.Products.Remove(products);
                 _context.SaveChanges();
             }
 
@@ -121,7 +123,7 @@ namespace mini_store.Controllers
 
         public IActionResult Edit(int id)
         {
-              var products=_context.products.Find(id);
+              var products=_context.Products.Find(id);
                var categories=_context.categories.ToList();
             ViewBag.categories=categories;
                if(products == null)
@@ -135,7 +137,7 @@ namespace mini_store.Controllers
         [HttpPost]
         public IActionResult Edit(Products product)
         {
-            _context.products.Update(product);
+            _context.Products.Update(product);
             _context.SaveChanges();
 
             return RedirectToAction("index");

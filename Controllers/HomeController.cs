@@ -2,19 +2,20 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using mini_store.Models;
 using mini_store.Data;
+using Microsoft.EntityFrameworkCore;
 namespace mini_store.Controllers;
 
 public class HomeController : Controller
 {
-   private readonly AppDbContext _context;
+    private readonly AppDbContext _context;
 
 
-   public HomeController(AppDbContext cn)
+    public HomeController(AppDbContext cn)
     {
-        _context=cn;
+        _context = cn;
     }
- private static  dynamic[] _products  =
-{
+    private static dynamic[] _products =
+   {
     new { CategoryId = 0, Name = "هاتف ذكي", Price = 2500, Description = "هاتف ذكي بكاميرا عالية الدقة", Image = "phone.jpg" },
 
     new { CategoryId = 0, Name = "حاسوب محمول", Price = 4500, Description = "حاسوب مخصص للمطورين ram 16gm hard 1TB screen 16hs", Image = "laptop.jpg" },
@@ -27,7 +28,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-       var Categories=_context.categories.ToList();
+        var Categories = _context.categories.ToList();
 
         return View(Categories);
     }
@@ -36,19 +37,19 @@ public class HomeController : Controller
     [Route("list")]
     public IActionResult Products(int id)
     {
-        var filtered=_context.products.Where(p=> p.CategoryId==id).ToList();
-         ViewBag.Filtered=filtered;
+        var filtered = _context.Products.Where(p => p.CategoryId == id).ToList();
+        ViewBag.Filtered = filtered;
         return View();
     }
 
-    public IActionResult Details(string name)
+    public IActionResult Details(int id)
     {
 
-         var filtered=_products.FirstOrDefault(p=> p.Name== name);
+        var filtered = _context.ProductDetails.Include(pd => pd.Product).FirstOrDefault(pd => pd.ProductId == id);
 
-         ViewBag.Products=filtered;
+        ViewBag.Products = filtered;
 
-        return View();
+        return View(filtered);
     }
 
     public IActionResult Privacy()
